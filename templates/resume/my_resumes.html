@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}My Resumes - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <div class="page-header mb-4">
+        <div>
+            <h2 class="page-title">My Resumes</h2>
+            <p class="text-muted">{{ resumes | length }} resume(s) uploaded</p>
+        </div>
+        <a href="{{ url_for('resume.upload') }}" class="btn btn-accent">
+            <i class="fas fa-plus me-2"></i>Upload New
+        </a>
+    </div>
+
+    {% if resumes %}
+    <div class="row g-3">
+        {% for resume in resumes %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card-dark resume-card">
+                <div class="resume-card-header">
+                    <div class="file-icon-lg">
+                        <i class="fas fa-file-{{ 'pdf' if resume.file_type == 'pdf' else 'word' if resume.file_type in ('docx', 'doc') else 'alt' }}"></i>
+                    </div>
+                    <span class="badge bg-secondary">{{ resume.file_type | upper }}</span>
+                </div>
+                <div class="resume-card-body">
+                    <h6 class="resume-card-name" title="{{ resume.original_name }}">
+                        {{ resume.original_name[:35] }}{% if resume.original_name | length > 35 %}...{% endif %}
+                    </h6>
+                    <p class="text-muted small">
+                        Uploaded {{ resume.uploaded_at.strftime('%d %b %Y') }}<br>
+                        {% if resume.file_size %}
+                            {{ (resume.file_size / 1024) | round(1) }} KB
+                        {% endif %}
+                    </p>
+                    <p class="text-muted small">
+                        {{ resume.analyses | length }} analysis(es) done
+                    </p>
+                </div>
+                <div class="resume-card-actions">
+                    <a href="{{ url_for('resume.analyze', resume_id=resume.id) }}" class="btn btn-accent btn-sm flex-fill">
+                        <i class="fas fa-chart-bar me-1"></i>Analyze
+                    </a>
+                    <form method="POST" action="{{ url_for('resume.delete_resume', resume_id=resume.id) }}"
+                          onsubmit="return confirm('Delete this resume and all its analyses?')">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state-page">
+        <i class="fas fa-file-upload fa-5x text-muted mb-4"></i>
+        <h4>No resumes uploaded yet</h4>
+        <p class="text-muted">Upload your first resume to get started with AI analysis.</p>
+        <a href="{{ url_for('resume.upload') }}" class="btn btn-accent btn-lg mt-2">
+            <i class="fas fa-upload me-2"></i>Upload Resume
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

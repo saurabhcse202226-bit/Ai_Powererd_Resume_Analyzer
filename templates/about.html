@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}About - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="mb-4">About ResumeAI</h1>
+            <p class="lead text-muted">
+                ResumeAI is a final year project built to help students and job seekers understand 
+                exactly how their resume stacks up against job requirements.
+            </p>
+            <p class="text-muted">
+                It uses NLP techniques to extract skills, experience, and education from uploaded resumes
+                and compares them against industry job profiles. Claude AI then provides personalized
+                feedback and actionable improvement suggestions.
+            </p>
+
+            <div class="row g-4 mt-4 text-start">
+                <div class="col-md-6">
+                    <div class="card-dark">
+                        <h5><i class="fas fa-tools text-accent me-2"></i>Tech Stack</h5>
+                        <ul class="text-muted ps-3">
+                            <li>Python + Flask (Backend)</li>
+                            <li>SQLite + SQLAlchemy (Database)</li>
+                            <li>pdfplumber + python-docx (Parsing)</li>
+                            <li>Claude API (AI feedback)</li>
+                            <li>Bootstrap 5 (Frontend)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-dark">
+                        <h5><i class="fas fa-user text-accent me-2"></i>Developer</h5>
+                        <p class="text-muted">
+                            Built as a portfolio/internship project. The goal was to create something
+                            actually useful while learning Flask, NLP, and AI APIs.
+                        </p>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-accent btn-sm">
+                            Try It Free
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

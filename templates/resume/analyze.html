@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Analyze Resume - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <div class="page-header mb-4">
+        <div>
+            <h2 class="page-title">Analyze Resume</h2>
+            <p class="text-muted">{{ resume.original_name }}</p>
+        </div>
+        <a href="{{ url_for('resume.my_resumes') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i>Back
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card-dark">
+                <h5 class="mb-4">Select a Job Profile</h5>
+                <form method="POST">
+                    <div class="job-list-select">
+                        {% for job in jobs %}
+                        <label class="job-option">
+                            <input type="radio" name="job_id" value="{{ job.id }}" class="d-none job-radio">
+                            <div class="job-option-card">
+                                <div class="job-option-header">
+                                    <div>
+                                        <h6 class="mb-0">{{ job.title }}</h6>
+                                        <small class="text-muted">{{ job.category }} &middot; {{ job.min_experience }}+ years</small>
+                                    </div>
+                                    <div class="job-check"><i class="fas fa-check-circle"></i></div>
+                                </div>
+                                <div class="job-required-skills mt-2">
+                                    {% for skill in job.get_required_skills()[:5] %}
+                                        <span class="badge bg-dark border me-1 mb-1">{{ skill }}</span>
+                                    {% endfor %}
+                                    {% if job.get_required_skills() | length > 5 %}
+                                        <span class="badge bg-secondary">+{{ job.get_required_skills() | length - 5 }} more</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </label>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="btn btn-accent btn-lg w-100 mt-4" id="analyzeBtn" disabled>
+                        <i class="fas fa-brain me-2"></i>Run AI Analysis
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card-dark">
+                <h5 class="mb-3">Resume Preview</h5>
+                <div class="resume-text-preview">
+                    {{ resume.raw_text[:800] if resume.raw_text else 'No text extracted.' }}
+                    {% if resume.raw_text and resume.raw_text | length > 800 %}
+                        <span class="text-muted">... (truncated)</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const radios = document.querySelectorAll('.job-radio');
+const analyzeBtn = document.getElementById('analyzeBtn');
+
+radios.forEach(radio => {
+    radio.addEventListener('change', function() {
+        document.querySelectorAll('.job-option-card').forEach(c => c.classList.remove('selected'));
+        this.closest('.job-option').querySelector('.job-option-card').classList.add('selected');
+        analyzeBtn.disabled = false;
+    });
+});
+</script>
+{% endblock %}

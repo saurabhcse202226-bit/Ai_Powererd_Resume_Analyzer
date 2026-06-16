@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <i class="fas fa-brain"></i>
+                <span>Resume<span class="text-accent">AI</span></span>
+            </div>
+            <h2 class="auth-title">Create Account</h2>
+            <p class="auth-subtitle">Start analyzing resumes for free</p>
+
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" class="form-control form-control-dark" 
+                           placeholder="John Doe" required autocomplete="name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control form-control-dark" 
+                           placeholder="you@example.com" required autocomplete="email">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control form-control-dark" 
+                           placeholder="At least 6 characters" required minlength="6">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirmPwd" 
+                           class="form-control form-control-dark" placeholder="Same password again" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">I am a</label>
+                    <select name="role" class="form-select form-control-dark">
+                        <option value="user">Job Seeker / Student</option>
+                        <option value="recruiter">Recruiter / HR</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-accent w-100 btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                </button>
+            </form>
+
+            <p class="text-center mt-3 text-muted">
+                Already have an account? 
+                <a href="{{ url_for('auth.login') }}" class="text-accent">Log in</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

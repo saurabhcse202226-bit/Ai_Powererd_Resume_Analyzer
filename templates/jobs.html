@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Job Profiles - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <div class="page-header mb-4">
+        <div>
+            <h2 class="page-title">Job Profiles</h2>
+            <p class="text-muted">Browse available job profiles to analyze your resume against</p>
+        </div>
+    </div>
+
+    <!-- Category filter -->
+    <div class="category-filters mb-4">
+        <a href="{{ url_for('main.jobs') }}" 
+           class="filter-btn {{ 'active' if not selected_category }}">All</a>
+        {% for cat in categories %}
+        <a href="{{ url_for('main.jobs', category=cat) }}" 
+           class="filter-btn {{ 'active' if selected_category == cat }}">{{ cat }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="row g-3">
+        {% for job in jobs %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card-dark job-card h-100">
+                <div class="job-card-top">
+                    <span class="badge bg-accent-soft">{{ job.category }}</span>
+                    <span class="text-muted small">{{ job.min_experience }}+ yrs exp</span>
+                </div>
+                <h5 class="job-card-title">{{ job.title }}</h5>
+                <p class="text-muted small">{{ job.description[:120] }}...</p>
+
+                <div class="job-skills-preview mb-3">
+                    {% for skill in job.get_required_skills()[:4] %}
+                        <span class="badge bg-dark border me-1 mb-1 small">{{ skill }}</span>
+                    {% endfor %}
+                    {% if job.get_required_skills() | length > 4 %}
+                        <span class="text-muted small">+{{ job.get_required_skills() | length - 4 }} more</span>
+                    {% endif %}
+                </div>
+
+                <div class="mt-auto">
+                    <p class="text-muted small mb-2">
+                        <i class="fas fa-graduation-cap me-1"></i>{{ job.education_requirement }}
+                    </p>
+                    <a href="{{ url_for('resume.upload') }}" class="btn btn-outline-primary btn-sm w-100">
+                        Analyze My Resume
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

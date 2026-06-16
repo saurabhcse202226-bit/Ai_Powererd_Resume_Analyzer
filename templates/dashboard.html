@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <div class="page-header mb-4">
+        <div>
+            <h2 class="page-title">Welcome back, {{ current_user.name.split()[0] }} 👋</h2>
+            <p class="text-muted">Here's your resume analysis overview</p>
+        </div>
+        <a href="{{ url_for('resume.upload') }}" class="btn btn-accent">
+            <i class="fas fa-plus me-2"></i>New Analysis
+        </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-card-icon bg-purple">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-card-num">{{ total_resumes }}</div>
+                <div class="stat-card-label">Resumes</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-card-icon bg-blue">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="stat-card-num">{{ total_analyses }}</div>
+                <div class="stat-card-label">Analyses</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-card-icon bg-green">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-card-num">{{ avg_score }}%</div>
+                <div class="stat-card-label">Avg Score</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="stat-card-icon bg-orange">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-card-num">{{ best_analysis.overall_score if best_analysis else '—' }}{% if best_analysis %}%{% endif %}</div>
+                <div class="stat-card-label">Best Score</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent Analyses -->
+        <div class="col-lg-7">
+            <div class="card-dark">
+                <div class="card-dark-header">
+                    <h5 class="mb-0">Recent Analyses</h5>
+                    <a href="{{ url_for('resume.history') }}" class="btn-link-sm">View all</a>
+                </div>
+                {% if recent_analyses %}
+                    <div class="analysis-list">
+                        {% for analysis in recent_analyses %}
+                        <div class="analysis-item">
+                            <div class="analysis-info">
+                                <div class="analysis-name">{{ analysis.resume.original_name }}</div>
+                                <div class="analysis-job text-muted small">
+                                    {% if analysis.job %}{{ analysis.job.title }}{% else %}No job selected{% endif %}
+                                    &middot; {{ analysis.analyzed_at.strftime('%d %b %Y') }}
+                                </div>
+                            </div>
+                            <div class="analysis-score-badge score-{{ 'success' if analysis.overall_score >= 70 else ('warning' if analysis.overall_score >= 50 else 'danger') }}">
+                                {{ analysis.overall_score }}%
+                            </div>
+                            <a href="{{ url_for('resume.result', analysis_id=analysis.id) }}" class="btn btn-sm btn-outline-secondary">
+                                View
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No analyses yet. Upload a resume to get started!</p>
+                        <a href="{{ url_for('resume.upload') }}" class="btn btn-accent btn-sm">Upload Resume</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Actions + Resumes -->
+        <div class="col-lg-5">
+            <div class="card-dark mb-4">
+                <div class="card-dark-header">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="quick-actions">
+                    <a href="{{ url_for('resume.upload') }}" class="quick-action-btn">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Resume</span>
+                    </a>
+                    <a href="{{ url_for('main.jobs') }}" class="quick-action-btn">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Browse Jobs</span>
+                    </a>
+                    <a href="{{ url_for('resume.history') }}" class="quick-action-btn">
+                        <i class="fas fa-history"></i>
+                        <span>View History</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-dark">
+                <div class="card-dark-header">
+                    <h5 class="mb-0">My Resumes</h5>
+                    <a href="{{ url_for('resume.my_resumes') }}" class="btn-link-sm">Manage</a>
+                </div>
+                {% if user_resumes %}
+                    {% for resume in user_resumes %}
+                    <div class="resume-list-item">
+                        <div class="resume-icon">
+                            <i class="fas fa-file-{{ 'pdf' if resume.file_type == 'pdf' else 'word' if resume.file_type == 'docx' else 'alt' }}"></i>
+                        </div>
+                        <div class="resume-info">
+                            <div class="resume-name">{{ resume.original_name[:30] }}{% if resume.original_name|length > 30 %}...{% endif %}</div>
+                            <div class="resume-date text-muted small">{{ resume.uploaded_at.strftime('%d %b %Y') }}</div>
+                        </div>
+                        <a href="{{ url_for('resume.analyze', resume_id=resume.id) }}" class="btn btn-sm btn-outline-primary">
+                            Analyze
+                        </a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-3">No resumes uploaded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

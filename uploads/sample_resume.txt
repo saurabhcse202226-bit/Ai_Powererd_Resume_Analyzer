@@ -1,0 +1,57 @@
+John Sharma
+john.sharma@gmail.com | +91-9876543210 | linkedin.com/in/johnsharma | github.com/johnsharma
+
+OBJECTIVE
+Motivated Computer Science graduate seeking a Python Backend Developer role where I can apply
+my skills in Flask, REST APIs, and SQL to build impactful products.
+
+EDUCATION
+Bachelor of Technology - Computer Science Engineering
+ABC Engineering College, Pune | 2020 - 2024
+CGPA: 8.4 / 10
+
+TECHNICAL SKILLS
+Programming Languages : Python, JavaScript, SQL, Bash
+Frameworks / Libraries : Flask, Django (basics), React (basics), Pandas, NumPy
+Databases             : MySQL, PostgreSQL, SQLite, MongoDB (basics)
+Tools & Platforms     : Git, GitHub, Docker, Postman, VS Code, Linux
+Other                 : REST API design, HTML, CSS, Bootstrap
+
+PROJECTS
+
+1. AI Resume Analyzer (Personal Project | Jan 2024 - Mar 2024)
+   - Built a Flask web app that analyzes resumes against job profiles using NLP
+   - Integrated Anthropic Claude AI for personalized feedback generation
+   - Implemented PDF/DOCX parsing using pdfplumber and python-docx
+   - Tech Stack: Python, Flask, SQLite, Claude API, Bootstrap 5
+
+2. Student Result Management System (College Project | Aug 2023 - Nov 2023)
+   - Developed a web app to manage student marks with role-based access (admin/teacher/student)
+   - Implemented REST APIs with Flask; used PostgreSQL for data storage
+   - Added CSV export functionality and graphical grade analysis with Chart.js
+   - Tech Stack: Python, Flask, PostgreSQL, JavaScript, Bootstrap
+
+3. Weather Dashboard (Mini Project | Jun 2023)
+   - Built a weather app consuming OpenWeatherMap API
+   - Displays current weather + 5-day forecast with dynamic backgrounds
+   - Tech Stack: Python, Flask, HTML, CSS, JavaScript
+
+INTERNSHIP EXPERIENCE
+Backend Developer Intern | XYZ Startup, Pune | May 2023 - Jul 2023 (2 months)
+- Worked on REST API development using Flask and MySQL
+- Fixed bugs in existing codebase and wrote unit tests with pytest
+- Learned Git workflow (feature branches, pull requests, code reviews)
+- Implemented user authentication with JWT tokens
+
+CERTIFICATIONS
+- Python for Everybody - Coursera (University of Michigan) | 2022
+- The Web Developer Bootcamp - Udemy | 2023
+- SQL for Data Analysis - Khan Academy | 2022
+
+ACHIEVEMENTS
+- Secured 2nd position in college-level Hackathon 2023 (out of 40 teams)
+- Completed 30-day Python coding challenge on HackerRank (5-star badge)
+- Active contributor to college's coding club; conducted workshops on Git
+
+LANGUAGES
+English (Professional), Hindi (Native), Marathi (Basic)

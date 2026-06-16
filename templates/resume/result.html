@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block title %}Analysis Result - ResumeAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <!-- Header -->
+    <div class="page-header mb-4">
+        <div>
+            <h2 class="page-title">Analysis Result</h2>
+            <p class="text-muted">
+                {{ analysis.resume.original_name }} 
+                {% if analysis.job %}&rarr; {{ analysis.job.title }}{% endif %}
+                &middot; {{ analysis.analyzed_at.strftime('%d %b %Y, %I:%M %p') }}
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('resume.analyze', resume_id=analysis.resume_id) }}" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-redo me-1"></i>Re-analyze
+            </a>
+            <a href="{{ url_for('resume.upload') }}" class="btn btn-accent btn-sm">
+                <i class="fas fa-plus me-1"></i>New
+            </a>
+        </div>
+    </div>
+
+    <!-- Overall Score -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card-dark text-center">
+                <div class="overall-score-ring">
+                    <svg viewBox="0 0 160 160" class="score-svg">
+                        <circle cx="80" cy="80" r="65" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14"/>
+                        <circle cx="80" cy="80" r="65" fill="none" 
+                                stroke="{{ '#10b981' if analysis.overall_score >= 70 else ('#f59e0b' if analysis.overall_score >= 50 else '#ef4444') }}"
+                                stroke-width="14"
+                                stroke-dasharray="{{ (analysis.overall_score / 100 * 408.41) | round(1) }} 408.41"
+                                stroke-linecap="round"
+                                transform="rotate(-90 80 80)"
+                                class="score-arc"/>
+                    </svg>
+                    <div class="score-center">
+                        <div class="score-big">{{ analysis.overall_score | int }}%</div>
+                        <div class="score-tag badge bg-{{ score_color }}">{{ score_label }}</div>
+                    </div>
+                </div>
+                <p class="text-muted small mt-2">Overall Match Score</p>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card-dark h-100">
+                <h5 class="mb-3">Score Breakdown</h5>
+                {% set scores = [
+                    ('Skill Match', analysis.skill_match_score, 'fa-cogs'),
+                    ('Experience', analysis.experience_score, 'fa-briefcase'),
+                    ('Education', analysis.education_score, 'fa-graduation-cap'),
+                    ('Keyword Match', analysis.keyword_score, 'fa-key'),
+                ] %}
+                {% for label, score, icon in scores %}
+                <div class="score-bar-row">
+                    <div class="score-bar-label">
+                        <i class="fas {{ icon }} me-2 text-accent"></i>
+                        {{ label }}
+                    </div>
+                    <div class="score-bar-wrap">
+                        <div class="score-bar-track">
+                            <div class="score-bar-fill" 
+                                 style="width: {{ score }}%; background: {{ '#10b981' if score >= 70 else ('#f59e0b' if score >= 50 else '#ef4444') }}"
+                                 data-width="{{ score }}"></div>
+                        </div>
+                        <span class="score-bar-num">{{ score | int }}%</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Summary -->
+    {% if analysis.ai_summary %}
+    <div class="card-dark mb-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-brain text-accent"></i>
+            <h5 class="mb-0">AI Summary</h5>
+        </div>
+        <p class="text-muted mb-0">{{ analysis.ai_summary }}</p>
+    </div>
+    {% endif %}
+
+    <div class="row g-4 mb-4">
+        <!-- Skills -->
+        <div class="col-md-6">
+            <div class="card-dark h-100">
+                <h5 class="mb-3"><i class="fas fa-check-circle text-success me-2"></i>Matched Skills</h5>
+                <div class="skill-tags">
+                    {% for skill in analysis.get_matched_skills() %}
+                        <span class="skill-tag-result matched">{{ skill }}</span>
+                    {% else %}
+                        <p class="text-muted">No matching skills found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card-dark h-100">
+                <h5 class="mb-3"><i class="fas fa-times-circle text-danger me-2"></i>Missing Skills</h5>
+                <div class="skill-tags">
+                    {% for skill in analysis.get_missing_skills() %}
+                        <span class="skill-tag-result missing">{{ skill }}</span>
+                    {% else %}
+                        <p class="text-muted text-success">No critical skills missing!</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Strengths -->
+        <div class="col-md-6">
+            <div class="card-dark h-100">
+                <h5 class="mb-3"><i class="fas fa-thumbs-up text-success me-2"></i>Strengths</h5>
+                <ul class="feedback-list">
+                    {% for item in analysis.get_strengths() %}
+                        <li><i class="fas fa-arrow-right text-success me-2"></i>{{ item }}</li>
+                    {% else %}
+                        <li class="text-muted">No specific strengths identified.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <!-- Weaknesses -->
+        <div class="col-md-6">
+            <div class="card-dark h-100">
+                <h5 class="mb-3"><i class="fas fa-thumbs-down text-warning me-2"></i>Areas to Improve</h5>
+                <ul class="feedback-list">
+                    {% for item in analysis.get_weaknesses() %}
+                        <li><i class="fas fa-arrow-right text-warning me-2"></i>{{ item }}</li>
+                    {% else %}
+                        <li class="text-muted">No specific weaknesses found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="card-dark mb-4">
+        <h5 class="mb-3"><i class="fas fa-lightbulb text-warning me-2"></i>AI Suggestions</h5>
+        <div class="row g-3">
+            {% for suggestion in analysis.get_suggestions() %}
+            <div class="col-md-6">
+                <div class="suggestion-item">
+                    <span class="suggestion-num">{{ loop.index }}</span>
+                    <span>{{ suggestion }}</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <p class="text-muted">No specific suggestions at this time.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Details -->
+    <div class="card-dark">
+        <h5 class="mb-3"><i class="fas fa-info-circle text-accent me-2"></i>Extracted Details</h5>
+        <div class="row g-3">
+            <div class="col-sm-6 col-md-3">
+                <div class="detail-item">
+                    <div class="detail-label">Experience</div>
+                    <div class="detail-val">{{ analysis.extracted_experience or '0' }} years</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="detail-item">
+                    <div class="detail-label">Education</div>
+                    <div class="detail-val">{{ analysis.extracted_education | title }}</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="detail-item">
+                    <div class="detail-label">Skills Found</div>
+                    <div class="detail-val">{{ analysis.get_extracted_skills() | length }}</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="detail-item">
+                    <div class="detail-label">Job Requirement</div>
+                    <div class="detail-val">{{ analysis.job.min_experience if analysis.job else '—' }}+ years</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// animate score bars
+document.addEventListener('DOMContentLoaded', function() {
+    const bars = document.querySelectorAll('.score-bar-fill');
+    setTimeout(() => {
+        bars.forEach(bar => {
+            bar.style.transition = 'width 1.2s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+    }, 100);
+});
+</script>
+{% endblock %}

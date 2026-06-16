@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}ResumeAI - AI-Powered Resume Analyzer{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="hero-section">
+    <div class="hero-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+    <div class="container">
+        <div class="row align-items-center min-vh-100 py-5">
+            <div class="col-lg-6">
+                <div class="hero-badge mb-4">
+                    <span class="badge-dot"></span>
+                    <span>AI-Powered Resume Analysis</span>
+                </div>
+                <h1 class="hero-title">
+                    Get Your Resume <br>
+                    <span class="text-gradient">Job-Ready</span> with AI
+                </h1>
+                <p class="hero-subtitle">
+                    Upload your resume, match it against real job profiles, and get
+                    instant AI feedback with skill gap analysis and actionable suggestions.
+                </p>
+                <div class="hero-actions">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-accent btn-lg">
+                        <i class="fas fa-rocket me-2"></i>Start Analyzing Free
+                    </a>
+                    <a href="#how-it-works" class="btn btn-outline-light btn-lg">
+                        See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats mt-5">
+                    <div class="stat-item">
+                        <div class="stat-num">500+</div>
+                        <div class="stat-label">Resumes Analyzed</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-num">6+</div>
+                        <div class="stat-label">Job Profiles</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-num">95%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="hero-card-mockup">
+                    <div class="mockup-card">
+                        <div class="mockup-header">
+                            <div class="mockup-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span class="mockup-title">Resume Analysis</span>
+                        </div>
+                        <div class="mockup-score-ring">
+                            <svg viewBox="0 0 120 120" class="score-ring-svg">
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/>
+                                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#scoreGrad)" stroke-width="10"
+                                        stroke-dasharray="220" stroke-dashoffset="55" stroke-linecap="round"
+                                        transform="rotate(-90 60 60)"/>
+                                <defs>
+                                    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#7c3aed"/>
+                                        <stop offset="100%" style="stop-color:#06b6d4"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="ring-label">
+                                <div class="ring-score">78</div>
+                                <div class="ring-text">Score</div>
+                            </div>
+                        </div>
+                        <div class="mockup-skills">
+                            <div class="skill-tag matched"><i class="fas fa-check"></i> Python</div>
+                            <div class="skill-tag matched"><i class="fas fa-check"></i> Flask</div>
+                            <div class="skill-tag matched"><i class="fas fa-check"></i> SQL</div>
+                            <div class="skill-tag missing"><i class="fas fa-times"></i> Docker</div>
+                            <div class="skill-tag missing"><i class="fas fa-times"></i> Kubernetes</div>
+                        </div>
+                        <div class="mockup-suggestion">
+                            <i class="fas fa-lightbulb text-warning me-2"></i>
+                            <span>Add Docker experience to boost your score by 12 points</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it works -->
+<section class="section-dark py-5" id="how-it-works">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three simple steps to a better resume</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <div class="step-icon"><i class="fas fa-upload"></i></div>
+                    <h4>Upload Resume</h4>
+                    <p>Upload your resume in PDF, DOCX, or TXT format. We extract and parse the text automatically.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <div class="step-icon"><i class="fas fa-crosshairs"></i></div>
+                    <h4>Select Job Role</h4>
+                    <p>Pick from our job profiles or describe the position. Our AI matches your skills to the requirements.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                    <h4>Get Instant Feedback</h4>
+                    <p>See your match score, missing skills, and specific suggestions from Claude AI to improve your resume.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="py-5 section-features">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Everything You Need</h2>
+        </div>
+        <div class="row g-4">
+            {% set features = [
+                ('fa-brain', 'AI-Powered Analysis', 'Claude AI reads your resume and provides human-like feedback on content, tone, and relevance.'),
+                ('fa-bullseye', 'Skill Gap Detection', 'See exactly which skills you have vs what the job needs. Know what to learn next.'),
+                ('fa-chart-pie', 'Detailed Scoring', 'Get breakdown scores for skills, experience, education, and keyword density.'),
+                ('fa-robot', 'ATS Optimization', 'Get tips to pass Applicant Tracking Systems used by most companies.'),
+                ('fa-briefcase', 'Multiple Job Profiles', 'Analyze your resume against Python Dev, Data Scientist, Full Stack and more.'),
+                ('fa-history', 'Track Progress', 'Compare analyses over time to see how much you\'ve improved.'),
+            ] %}
+            {% for icon, title, desc in features %}
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas {{ icon }}"></i>
+                    </div>
+                    <h5>{{ title }}</h5>
+                    <p class="text-muted">{{ desc }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section py-5">
+    <div class="container py-5 text-center">
+        <h2 class="mb-3">Ready to Improve Your Resume?</h2>
+        <p class="text-muted mb-4">It's free. No credit card needed. Just upload and analyze.</p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-accent btn-lg">
+            <i class="fas fa-rocket me-2"></i>Get Started Now
+        </a>
+    </div>
+</section>
+{% endblock %}
